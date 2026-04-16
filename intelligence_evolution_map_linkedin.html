@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intelligence Evolution Map — English edition</title>
+  <style>
+    :root{
+      --bg:#0a1020;
+      --panel:rgba(255,255,255,.05);
+      --panel2:rgba(255,255,255,.03);
+      --border:rgba(255,255,255,.10);
+      --text:#eef2ff;
+      --muted:rgba(238,242,255,.68);
+      --muted2:rgba(238,242,255,.44);
+      --green:#22c55e;
+      --amber:#f59e0b;
+      --red:#ef4444;
+      --cyan:#22d3ee;
+      --violet:#8b5cf6;
+      --blue:#60a5fa;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(34,211,238,.13), transparent 30%),
+        radial-gradient(circle at right, rgba(139,92,246,.12), transparent 26%),
+        radial-gradient(circle at left bottom, rgba(59,130,246,.10), transparent 24%),
+        var(--bg);
+    }
+    .wrap{max-width:1280px;margin:0 auto;padding:28px 16px 44px}
+    .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px}
+    h1{font-size:42px;line-height:1.04;margin:0 0 10px}
+    .sub{max-width:980px;color:var(--muted);line-height:1.75;margin-bottom:18px}
+    .nav,.chips{display:flex;gap:8px;flex-wrap:wrap}
+    .nav{margin-bottom:20px}
+    .tab-btn,.preset-btn,.chip,.select-btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-size:14px;
+      transition:.18s ease;
+    }
+    .tab-btn.active,.chip.active,.preset-btn:hover,.select-btn.active{background:rgba(255,255,255,.12)}
+    .grid{display:grid;gap:16px}
+    .grid-main{grid-template-columns:380px 1fr}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .hero-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:16px}
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:20px;
+      backdrop-filter: blur(8px);
+    }
+    .panel-soft{
+      background:var(--panel2);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:16px;
+    }
+    .small{font-size:13px;color:var(--muted)}
+    .tiny{font-size:11px;color:var(--muted2)}
+    .big{font-size:68px;font-weight:800;line-height:1}
+    .section-title{font-size:28px;font-weight:800;margin:0 0 6px}
+    .lead{font-size:18px;line-height:1.75;color:#f8fafc}
+    .bar{height:8px;background:rgba(255,255,255,.10);border-radius:999px;overflow:hidden;margin-bottom:10px}
+    .fill{height:100%;border-radius:999px}
+    .danger{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.24);border-radius:18px;padding:14px}
+    .success{background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.24);border-radius:18px;padding:14px}
+    .hero-note{background:rgba(34,211,238,.10);border:1px solid rgba(34,211,238,.24);border-radius:22px;padding:18px}
+    .violet-note{background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.24);border-radius:22px;padding:18px}
+    .layer-card{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      min-height:150px;
+    }
+    .system-card{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:22px;
+      padding:18px;
+    }
+    .pill{padding:6px 10px;border-radius:999px;font-size:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05)}
+    .pill.green{background:rgba(34,197,94,.15);color:#bbf7d0;border-color:rgba(34,197,94,.28)}
+    .pill.amber{background:rgba(245,158,11,.15);color:#fde68a;border-color:rgba(245,158,11,.28)}
+    .pill.red{background:rgba(239,68,68,.15);color:#fecaca;border-color:rgba(239,68,68,.28)}
+    .hide{display:none}
+    .board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+    .lane{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:20px;
+      padding:14px;
+      min-height:182px;
+    }
+    .leader-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);
+      color:#bbf7d0;font-size:12px;font-weight:700;
+    }
+    .slider-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .caps-row{display:flex;flex-direction:column;gap:14px}
+    .battle-grid{display:grid;grid-template-columns:320px 1fr;gap:16px}
+    .battle-table{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+    .battle-row-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
+      padding:14px;
+    }
+    .battle-row-head{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      gap:12px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+    .battle-side{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .battle-side.right{text-align:right}
+    .battle-name{
+      font-size:14px;
+      font-weight:700;
+    }
+    .battle-score{
+      font-size:28px;
+      font-weight:800;
+      line-height:1;
+    }
+    .battle-center{
+      text-align:center;
+      min-width:120px;
+    }
+    .battle-metric{
+      font-size:20px;
+      font-weight:800;
+      line-height:1.1;
+    }
+    .battle-weight{
+      font-size:11px;
+      color:rgba(238,242,255,.44);
+      margin-top:4px;
+    }
+    .battle-winner-pill{
+      display:inline-block;
+      margin-top:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:12px;
+      font-weight:700;
+    }
+    .battle-single-bar{
+      height:10px;
+      background:rgba(255,255,255,.08);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .battle-bar-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      align-items:center;
+    }
+    .battle-head{display:grid;grid-template-columns:1fr 120px 1fr;gap:10px;align-items:center}
+    .battle-compare{display:grid;grid-template-columns:1fr 100px 1fr;gap:12px;align-items:center;margin-top:14px}
+    .battle-meter{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+    .thesis-card{
+      background:linear-gradient(135deg, rgba(34,211,238,.12), rgba(139,92,246,.14));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:24px;
+      padding:18px;
+      min-height:190px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .footer{margin-top:28px;text-align:center;color:rgba(255,255,255,.28);font-size:12px}
+    input[type=range]{width:100%}
+    @media (max-width: 1080px){
+      .grid-main,.grid-2,.grid-3,.hero-grid,.board,.slider-grid,.battle-grid,.battle-head,.battle-compare{grid-template-columns:1fr}
+      h1{font-size:34px}
+      .big{font-size:54px}
+      .section-title{font-size:24px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Xi Research · English edition</div>
+    <h1>Intelligence Evolution Map</h1>
+    <div class="sub">
+      Public version of your methodology: 10 layers of intellectual-system development, a map of humans / AI / ants, an interactive bottleneck model, company battle mode, and short theses instead of awkward copyable paragraphs.
+    </div>
+
+    <div class="hero-grid">
+      <div class="panel">
+        <div class="tiny">Core thesis</div>
+        <div style="font-size:24px;font-weight:800;margin:6px 0 10px">AGI is synchronization</div>
+        <div class="small">Not one record metric, but the alignment of memory, reasoning, agency, self-correction, embodiment, and metacognition.</div>
+      </div>
+      <div class="panel">
+        <div class="tiny">Main bottleneck</div>
+        <div style="font-size:24px;font-weight:800;margin:6px 0 10px">Memory + metacognition</div>
+        <div class="small">Reasoning has already grown quickly. The next shift goes through accumulated experience and knowledge of one’s limits.</div>
+      </div>
+      <div class="panel">
+        <div class="tiny">Most provocative conclusion</div>
+        <div style="font-size:24px;font-weight:800;margin:6px 0 10px">AGI may not be built by one company</div>
+        <div class="small">The path increasingly looks like an assembly: OpenAI is stronger in reasoning, Anthropic in agents and memory, and DeepMind in embodiment and world-model direction.</div>
+      </div>
+    </div>
+
+    <div class="nav" id="nav"></div>
+
+    <section id="tab-method" class="tab">
+      <div class="grid grid-2">
+        <div class="panel">
+          <div class="tiny">What this is</div>
+          <div class="section-title">What we built here</div>
+          <div class="lead">
+            We assembled our own methodology for evaluating intellectual systems: not by one metric, but by layers of development — from energy and perception to memory, world models, metacognition, and integration.
+          </div>
+          <div class="caps-row" style="margin-top:14px">
+            <div class="panel-soft"><b>1. Derived 10 layers.</b><div class="small" style="margin-top:6px">This is a framework that helps compare not only AI models, but also humans, ant colonies, the immune system, companies, and organizations.</div></div>
+            <div class="panel-soft"><b>2. Built a transition map.</b><div class="small" style="margin-top:6px">Which layer follows which, what has to mature, which bottleneck slows the system, and which next shift is most likely.</div></div>
+            <div class="panel-soft"><b>3. Turned it into forecasts.</b><div class="small" style="margin-top:6px">Who is more likely to lead in memory, agents, world models, and metacognition, and why AGI may arrive as an assembly of the best parts.</div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="tiny">Which hypotheses</div>
+          <div class="section-title">What the model stands on</div>
+          <div class="caps-row">
+            <div class="hero-note"><b>Hypothesis 1.</b> Intelligence develops in layers, not on a single scale.</div>
+            <div class="hero-note"><b>Hypothesis 2.</b> Transitions follow an order: memory does not become stable without action and repetition, and metacognition does not emerge without memory and self-checking.</div>
+            <div class="hero-note"><b>Hypothesis 3.</b> AGI is not a record on one metric, but the synchronization of several mature layers.</div>
+            <div class="hero-note"><b>Hypothesis 4.</b> Different systems have different ceilings: humans reach almost L10, AI is still around L7–L8, and ant colonies stop below symbolic reflection.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-layers" class="tab hide">
+      <div class="panel">
+        <div class="tiny">10 layers</div>
+        <div class="section-title">What stages of system development exist</div>
+        <div class="small" style="margin-bottom:14px">This is not an official global standard, but your working research framework.</div>
+        <div class="grid grid-2" id="layers-list"></div>
+      </div>
+    </section>
+
+    <section id="tab-systems" class="tab hide">
+      <div class="grid grid-2">
+        <div class="panel">
+          <div class="tiny">Map of systems</div>
+          <div class="section-title">Where each system sits</div>
+          <div class="caps-row" id="systems-list"></div>
+        </div>
+
+        <div class="panel">
+          <div class="tiny">Key answers</div>
+          <div class="violet-note">
+            <div style="font-weight:800;font-size:20px;margin-bottom:6px">Where are humans?</div>
+            <div class="small">In this model, humans sit around <b>L9</b>: language, abstraction, reflection, and partial metacognition are already present. Reaching L10 is not automatic; it comes through integration.</div>
+          </div>
+          <div class="hero-note" style="margin-top:14px">
+            <div style="font-weight:800;font-size:20px;margin-bottom:6px">Where will AI overtake humans first?</div>
+            <div class="small">On the <b>language-symbolic layer</b>. AI is already natively multilingual, scales knowledge faster, and may reach “L10 of language” before humans do.</div>
+          </div>
+          <div class="danger" style="margin-top:14px">
+            <div style="font-weight:800;font-size:20px;margin-bottom:6px">Why do ants not reach the upper layers?</div>
+            <div class="small">Because the colony has coordination and memory in the environment, but no stable internal symbolic model and no metacognition. In this framework, an ant colony reaches roughly an <b>L6–L7 ceiling</b>.</div>
+          </div>
+          <div class="success" style="margin-top:14px">
+            <div style="font-weight:800;font-size:20px;margin-bottom:6px">Why does this matter for AI?</div>
+            <div class="small">AI without memory and self-checking may end up as “a very powerful ant colony”: efficient, but not reflective. That means the transition to AGI requires not only power, but an internal model of itself.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="tab-future" class="tab hide">
+      <div class="grid grid-2">
+        <div class="panel">
+          <div class="tiny">Key roadmap principle</div>
+          <div class="section-title">Metacognition must mature last</div>
+          <div class="danger" style="margin-top:10px">
+            <div style="font-weight:800;font-size:20px;margin-bottom:6px">Why you cannot “turn it up” before memory and self-correction</div>
+            <div class="small">
+              In this framework, metacognition is not just another capability. It is a <b>model of all the other capabilities</b>:
+              to know what it does not know, estimate confidence, choose a thinking strategy, and inhibit action when evidence is insufficient.
+            </div>
+          </div>
+          <div class="caps-row" style="margin-top:14px">
+            <div class="panel-soft">
+              <b>If you give it too early</b>
+              <div class="small" style="margin-top:6px">
+                you get a distorted system: it seems to “reflect,” but it has nothing to stand on. Without mature memory, self-correction, and reasoning, such metacognition is pseudo-metacognition — elegant, but crippled.
+              </div>
+            </div>
+            <div class="panel-soft">
+              <b>Analogy with the brain</b>
+              <div class="small" style="margin-top:6px">
+                The PFC matures last. In humans this is the longest stretch — from adolescence to stable adult regulation. That is why in our model <b>metacognition is the slowest parameter</b>.
+              </div>
+            </div>
+            <div class="panel-soft">
+              <b>Practical implication</b>
+              <div class="small" style="margin-top:6px">
+                AGI is determined not by the best parameter, but by the <b>slowest mature layer</b>. Right now the longest tail remains metacognition, not reasoning.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="tiny">What AGI means in our framework</div>
+          <div class="section-title">Not a super-genius, but a mature intelligence</div>
+          <div class="hero-note" style="margin-top:10px">
+            <div style="font-weight:800;font-size:20px;margin-bottom:6px">AGI = all key parameters above threshold at the same time</div>
+            <div class="small">
+              That means the system remembers, reasons, acts, corrects itself, is grounded in the physics of its environment, and knows the limits of its own knowledge. Not “the fastest,” but <b>coherent and reliable</b>.
+            </div>
+          </div>
+          <div class="caps-row" style="margin-top:14px">
+            <div class="panel-soft">
+              <b>Analogy with humans</b>
+              <div class="small" style="margin-top:6px">
+                AGI in this picture is closer to a <b>“25-year-old”</b> than to a sage or a super-genius: fully formed, capable of independent work, but still without deep accumulated experience.
+              </div>
+            </div>
+            <div class="panel-soft">
+              <b>Why the 2032–2035 window still makes sense</b>
+              <div class="small" style="margin-top:6px">
+                Not because reasoning itself will take that long to grow. Rather because after memory and self-correction, the system still needs a stage where metacognition becomes structural and stable rather than decorative.
+              </div>
+            </div>
+            <div class="success">
+              <div style="font-weight:800;font-size:18px;margin-bottom:6px">In short</div>
+              <div class="small">
+                In this methodology, AGI = <b>S_hard ≈ 1.0</b>, when all key layers are above threshold at the same time.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:16px">
+        <div class="panel">
+          <div class="tiny">What ASI means in our view</div>
+          <div class="section-title">Not one super-brain, but a swarm of AGI agents</div>
+          <div class="lead">
+            The next level after AGI is not “one even stronger individual intelligence,” but cooperation: specialized AGI agents assemble into a next-order system.
+          </div>
+          <div class="caps-row" style="margin-top:14px">
+            <div class="panel-soft">
+              <b>Main inversion</b>
+              <div class="small" style="margin-top:6px">
+                Individual AI → collective AI. As cells became an organism, neurons became a brain, and humans became society.
+              </div>
+            </div>
+            <div class="panel-soft">
+              <b>So ASI = not speed, but wisdom</b>
+              <div class="small" style="margin-top:6px">
+                The highest trait here is not “answer faster,” but <b>knowing when not to act</b>. In other words, not merely maximizing a goal, but understanding the limits of optimization.
+              </div>
+            </div>
+            <div class="panel-soft">
+              <b>Working window</b>
+              <div class="small" style="margin-top:6px">
+                Within your model, this naturally maps to <b>2035–2040</b>: first mature AGI, then the integration of AGI agents into a higher collective layer.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="tiny">Where do humans fit here?</div>
+          <div class="section-title">Humans do not disappear; they change roles</div>
+          <div class="violet-note" style="margin-top:10px">
+            <div style="font-weight:800;font-size:20px;margin-bottom:6px">Humans do not “die” when ASI appears</div>
+            <div class="small">
+              Just as a neuron did not die when the brain appeared but became part of it, humans in this picture are not automatically replaced — they become a type of node in a new system.
+            </div>
+          </div>
+          <div class="caps-row" style="margin-top:14px">
+            <div class="panel-soft">
+              <b>Scenario 1. Technology assembly</b>
+              <div class="small" style="margin-top:6px">
+                Reasoning from one lab, agents and memory from another, embodiment from a third. The most “evolutionary” path.
+              </div>
+            </div>
+            <div class="panel-soft">
+              <b>Scenario 2. Human + AI</b>
+              <div class="small" style="margin-top:6px">
+                A new layer on top of humans: interfaces, assistants, and later perhaps neurointerfaces. Not replacement, but augmentation.
+              </div>
+            </div>
+            <div class="panel-soft">
+              <b>Scenario 3. One winner</b>
+              <div class="small" style="margin-top:6px">
+                Theoretically possible, but right now it explains the split leadership by layers worse than the assembly scenario.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="tab-play" class="tab hide">
+      <div class="grid grid-main">
+        <div class="panel">
+          <div class="tiny">Now</div>
+          <div class="big" id="score">65%</div>
+          <div style="font-size:24px;color:#fde68a;font-weight:700;margin-top:8px" id="age">AI = a 4–7 years</div>
+          <div class="small" id="age-desc">Logic is visible, but the system is still fragile.</div>
+
+          <div class="danger" style="margin-top:18px">
+            <div class="tiny" style="text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Main bottleneck</div>
+            <div style="font-size:28px;font-weight:700" id="bottleneck-title">💾 Memory</div>
+            <div class="small" id="bottleneck-note">AI forgets context between sessions</div>
+          </div>
+
+          <div class="hero-note" style="margin-top:16px">
+            <div class="tiny" style="text-transform:uppercase;letter-spacing:.08em;color:#a5f3fc">Play with scenarios</div>
+            <div class="chips" id="presets" style="margin-top:10px"></div>
+          </div>
+
+          <div class="panel-soft" style="margin-top:16px">
+            <div class="tiny" style="text-transform:uppercase;letter-spacing:.08em">Scenario time estimate</div>
+            <div class="small" id="eta-text" style="margin-top:8px"></div>
+            <div class="tiny" style="margin-top:8px" id="memory-boost"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="tiny">Move the system</div>
+          <div class="section-title">What still needs to mature</div>
+          <div class="slider-grid" id="caps"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-board" class="tab hide">
+      <div class="panel">
+        <div class="tiny">Breakthrough board</div>
+        <div class="section-title">Who wins which square</div>
+        <div class="small" style="margin-bottom:14px">There is not one winner of everything, but different leaders on different squares of the field.</div>
+        <div class="board" id="board"></div>
+      </div>
+    </section>
+
+    <section id="tab-battle" class="tab hide">
+      <div class="grid battle-grid">
+        <div class="panel">
+          <div class="tiny">Battle mode</div>
+          <div class="section-title">Who beats whom and on which layer</div>
+          <div class="small" style="margin-bottom:14px">Compare two labs on a chosen layer. The winner depends not on general hype, but on a specific capability.</div>
+          <div class="caps-row">
+            <div><div class="tiny" style="margin-bottom:8px">Left side</div><div class="chips" id="left-company"></div></div>
+            <div><div class="tiny" style="margin-bottom:8px">Right side</div><div class="chips" id="right-company"></div></div>
+            <div><div class="tiny" style="margin-bottom:8px">Battle category</div><div class="chips" id="battle-cats"></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="battle-head">
+            <div id="battle-left-name" style="font-size:24px;font-weight:800">OpenAI</div>
+            <div style="text-align:center" class="leader-badge" id="battle-winner">Leading</div>
+            <div id="battle-right-name" style="font-size:24px;font-weight:800;text-align:right">Anthropic</div>
+          </div>
+          <div class="small" id="battle-explainer" style="margin-top:12px">This compares not overall “coolness,” but the selected layer.</div>
+          <div id="battle-table" class="battle-table"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-merge" class="tab hide">
+      <div class="grid grid-2">
+        <div class="panel">
+          <div class="tiny">Viral simulator</div>
+          <div class="section-title">What if you combine labs</div>
+          <div class="small" style="margin-bottom:14px">Choose one or two companies. We take the maximum of their strengths and see how much closer such a combination gets to AGI.</div>
+          <div class="chips" id="company-chips"></div>
+
+          <div class="success" style="margin-top:16px">
+            <div class="tiny" style="text-transform:uppercase;letter-spacing:.08em">Combination</div>
+            <div style="font-size:28px;font-weight:700;margin:6px 0" id="merge-title">Anthropic + DeepMind</div>
+            <div class="small" id="merge-summary">Together they cover memory, agents, and embodiment better than anyone alone.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="tiny">How close this combination is to AGI</div>
+          <div style="font-size:46px;font-weight:800;margin-top:4px" id="merge-score">83%</div>
+          <div class="small" id="merge-gap">Main remaining gap: metacognition</div>
+          <div class="caps-row" id="merge-bars" style="margin-top:16px"></div>
+        </div>
+      </div>
+
+      <div class="hero-note" style="margin-top:16px">
+        <div class="tiny" style="text-transform:uppercase;letter-spacing:.08em;color:#a5f3fc">Main takeaway</div>
+        <div class="lead" id="ecosystem-take">If the best pair is much stronger than the best single company, the “ecosystem / assembly” scenario looks more likely than the “single champion” scenario.</div>
+      </div>
+    </section>
+
+    <section id="tab-theses" class="tab hide">
+      <div class="grid grid-3" id="thesis-cards"></div>
+    </section>
+
+    <div class="footer">Intelligence Evolution Map · release v2 · offline-ready</div>
+  </div>
+
+  <script>
+    const layers = [
+      {code:"L1", name:"Energy", desc:"The system can function at all: there is resource, power, compute, and basic viability."},
+      {code:"L2", name:"Structure", desc:"A carrier and organization appear: architecture, form, and connectivity of components."},
+      {code:"L3", name:"Perception", desc:"The system begins to distinguish signals and detect patterns."},
+      {code:"L4", name:"Action", desc:"The system can change the environment, not just observe it."},
+      {code:"L5", name:"Memory", desc:"Experience is stored and reused."},
+      {code:"L6", name:"World Model", desc:"A causal map appears: if you do X, Y will happen."},
+      {code:"L7", name:"Symbols and Language", desc:"The system begins to operate with abstractions, signs, and descriptions."},
+      {code:"L8", name:"Recursion", desc:"Multi-step loops, nested plans, and long chains of thought appear."},
+      {code:"L9", name:"Metacognition", desc:"The system evaluates itself: confidence, mistakes, ignorance, and choice of thinking mode."},
+      {code:"L10", name:"Integration", desc:"The layers work coherently as one mature system."}
+    ];
+
+    const systems = [
+      {name:"Human", icon:"🧍", level:"L9 → L10", why:"Language, abstraction, reflection, and partial metacognition are already present. Reaching L10 is not automatic; it comes through integration.", ceiling:"The ceiling is high, but development is long."},
+      {name:"AI", icon:"🤖", level:"L7–L8", why:"Language and reasoning are already strong, but memory, stable knowledge of its own limits, and embodiment are not yet mature.", ceiling:"It may reach L10 on the language layer faster than humans."},
+      {name:"Ant Colony", icon:"🐜", level:"≈ L6–L7 ceiling", why:"There is coordination, action, and collective memory in the environment. But there is no stable internal symbolic model and no metacognition.", ceiling:"It runs into the absence of a symbolic internal layer."},
+      {name:"Immune System", icon:"🧬", level:"≈ L5–L6 ceiling", why:"There is recognition, adaptation, and memory. But there is no language and no recursive world model.", ceiling:"It is very smart locally, but does not become a symbolic system."}
+    ];
+
+    const capsBase = [
+      { key:"memory", name:"Memory", cur:32, need:95, icon:"💾", note:"AI forgets context between sessions" },
+      { key:"reasoning", name:"Reasoning", cur:88, need:95, icon:"🧮", note:"Strong growth has already happened" },
+      { key:"agency", name:"Agency", cur:72, need:85, icon:"🤖", note:"It can handle long tasks, but not always reliably" },
+      { key:"selfcorr", name:"Self-Correction", cur:68, need:90, icon:"🔧", note:"It sometimes notices its own mistakes" },
+      { key:"embody", name:"Physics and Embodiment", cur:35, need:70, icon:"🦾", note:"Real grounding in the world is still weak" },
+      { key:"metacog", name:"Metacognition", cur:22, need:80, icon:"🪞", note:"It poorly understands the limits of its own knowledge" }
+    ];
+
+    const presets = [
+      {label:"Base", apply:s=>resetCaps(s)},
+      {label:"Memory solved", apply:s=>setCaps(s,{memory:82})},
+      {label:"Agents take off", apply:s=>setCaps(s,{agency:88,selfcorr:82})},
+      {label:"Robots arrived", apply:s=>setCaps(s,{embody:82,memory:58})},
+      {label:"Almost AGI", apply:s=>setCaps(s,{memory:84,reasoning:93,agency:88,selfcorr:86,embody:72,metacog:63})},
+      {label:"All at 100%", apply:s=>setCaps(s,{memory:100,reasoning:100,agency:100,selfcorr:100,embody:100,metacog:100})},
+      {label:"Chaos", apply:s=>randomizeCaps(s)}
+    ];
+
+    const breakthroughs = [
+      { id:"reasoning", title:"Reasoning", window:"2026", deps:{reasoning:.65,selfcorr:.35}, leader:"OpenAI", runner:"Anthropic", note:"Transition from “often smart” to “predictably smart.”" },
+      { id:"agents", title:"Agents", window:"2026–27", deps:{agency:.45,selfcorr:.30,reasoning:.25}, leader:"Anthropic", runner:"OpenAI", note:"Autonomous action chains without a constant human in the loop." },
+      { id:"memory", title:"Memory", window:"2027–28", deps:{memory:.6,agency:.4}, leader:"Anthropic", runner:"OpenAI", note:"Experience accumulation and stable context across sessions." },
+      { id:"world", title:"World model", window:"2027–29", deps:{embody:.45,memory:.25,reasoning:.15,agency:.15}, leader:"DeepMind", runner:"Meta", note:"A causal map of the environment, not just a language description." },
+      { id:"metacog", title:"Metacognition", window:"2030+", deps:{metacog:.55,selfcorr:.25,memory:.20}, leader:"Anthropic", runner:"DeepMind", note:"Understanding the limits of one’s own knowledge." }
+    ];
+
+    const companies = [
+      {id:"anthropic", name:"Anthropic", color:"#d6a66d", stats:{memory:78, reasoning:82, agency:88, selfcorr:84, embody:25, metacog:76}},
+      {id:"openai", name:"OpenAI", color:"#22c55e", stats:{memory:68, reasoning:92, agency:80, selfcorr:78, embody:28, metacog:62}},
+      {id:"deepmind", name:"DeepMind", color:"#60a5fa", stats:{memory:55, reasoning:80, agency:62, selfcorr:66, embody:94, metacog:70}},
+      {id:"meta", name:"Meta", color:"#8b5cf6", stats:{memory:42, reasoning:66, agency:45, selfcorr:44, embody:58, metacog:40}},
+      {id:"deepseek", name:"DeepSeek", color:"#f59e0b", stats:{memory:46, reasoning:78, agency:38, selfcorr:72, embody:18, metacog:48}},
+      {id:"xai", name:"xAI", color:"#f43f5e", stats:{memory:38, reasoning:81, agency:50, selfcorr:58, embody:20, metacog:36}}
+    ];
+
+    const battleCategories = {
+      reasoning:{label:"Reasoning", keys:{reasoning:.7,selfcorr:.3}},
+      memory:{label:"Memory", keys:{memory:.75,agency:.25}},
+      agents:{label:"Agents", keys:{agency:.5,selfcorr:.25,reasoning:.25}},
+      embodiment:{label:"Embodiment", keys:{embody:.7,memory:.15,reasoning:.15}},
+      metacog:{label:"Metacognition", keys:{metacog:.7,selfcorr:.2,memory:.1}},
+      agi:{label:"AGI stack", keys:{memory:.22,reasoning:.18,agency:.18,selfcorr:.16,embody:.12,metacog:.14}}
+    };
+
+    const agiWeights = battleCategories.agi.keys;
+
+    const state = {
+      tab: "method",
+      caps: JSON.parse(JSON.stringify(capsBase)),
+      selectedCompanies: ["anthropic","deepmind"],
+      battleLeft: "openai",
+      battleRight: "anthropic",
+      battleCat: "agi"
+    };
+
+    function pct(cur, need){ return Math.min(cur / need, 1); }
+    function calcS(caps){ return caps.reduce((a,c)=>a + pct(c.cur,c.need),0) / caps.length; }
+    function brainAge(s){
+      if (s < 0.30) return ["0–6 months","Reflexes and the earliest reactions."];
+      if (s < 0.45) return ["6–18 months","Primary memory and stability appear."];
+      if (s < 0.60) return ["2–4 years","There is language and causality, but little self-control."];
+      if (s < 0.75) return ["4–7 years","Logic is visible, but the system is still fragile."];
+      if (s < 0.85) return ["7–14 years","Abstractions appear, but maturity is not there yet."];
+      if (s < 0.95) return ["14–25 years","Control and meta-planning mature."];
+      return ["25+ years","An integrated mature system."];
+    }
+    function nextShift(caps){ return [...caps].sort((a,b)=>pct(a.cur,a.need)-pct(b.cur,b.need))[0]; }
+    function setCaps(state, overrides){ state.caps = state.caps.map(c => overrides[c.key] != null ? {...c, cur:overrides[c.key]} : c); }
+    function resetCaps(state){ state.caps = JSON.parse(JSON.stringify(capsBase)); }
+    function randomizeCaps(state){ state.caps = state.caps.map(c => ({...c, cur: Math.max(10, Math.min(98, Math.round(c.cur + (Math.random()*44 - 22))))})); }
+    function weightedReadiness(weights, caps){
+      const map = Object.fromEntries(caps.map(c=>[c.key, pct(c.cur,c.need)]));
+      return Object.entries(weights).reduce((a,[k,w])=>a + (map[k]||0)*w, 0);
+    }
+    function stateLabel(score){
+      if(score >= .9) return ["almost ready","green"];
+      if(score >= .65) return ["in progress","amber"];
+      return ["too early","red"];
+    }
+
+    // New logic: memory is not static if self-correction/metacognition/agency are high.
+    function effectiveMap(caps){
+      const raw = Object.fromEntries(caps.map(c=>[c.key, pct(c.cur,c.need)]));
+      const accel = 0.4*raw.agency + 0.35*raw.selfcorr + 0.25*raw.metacog;
+      const memoryEff = Math.min(1, raw.memory + 0.55 * accel * (1 - raw.memory));
+      const metacogEff = Math.min(1, raw.metacog + 0.25 * raw.memory * raw.selfcorr * (1 - raw.metacog));
+      return {
+        ...raw,
+        memoryEff,
+        metacogEff
+      };
+    }
+
+    function estimateAGIWindow(caps){
+      const m = effectiveMap(caps);
+      const readiness =
+        0.22*m.memoryEff +
+        0.18*m.reasoning +
+        0.18*m.agency +
+        0.16*m.selfcorr +
+        0.12*m.embody +
+        0.14*m.metacogEff;
+
+      const weakest = Math.min(m.memoryEff, m.reasoning, m.agency, m.selfcorr, m.embody, m.metacogEff);
+      const overall = Math.max(0, Math.min(1, readiness * 0.72 + weakest * 0.28));
+
+      if (overall >= 0.995) {
+        return {start: 2026, end: 2026, overall, m};
+      }
+
+      const start = 2026 + Math.ceil((1 - overall) * 6.0);
+      const end = Math.min(2042, start + Math.max(1, Math.ceil((1 - overall) * 2.5)));
+      return {start, end, overall, m};
+    }
+
+    function scoreFromStats(stats, weights){
+      return Object.entries(weights).reduce((a,[k,w])=>a + ((stats[k]||0)/100)*w, 0);
+    }
+    function agiCompanyScore(stats){ return scoreFromStats(stats, agiWeights); }
+    function combineCompanies(ids){
+      const selected = companies.filter(c=>ids.includes(c.id));
+      const stats = {};
+      Object.keys(agiWeights).forEach(k=>{ stats[k] = Math.max(...selected.map(c=>c.stats[k]||0)); });
+      return stats;
+    }
+    function biggestGap(stats){
+      const entries = Object.entries(stats).sort((a,b)=>a[1]-b[1]);
+      const names = {memory:"memory", reasoning:"reasoning", agency:"agency", selfcorr:"self-correction", embody:"embodiment", metacog:"metacognition"};
+      return names[entries[0][0]];
+    }
+    function bestSolo(){ return [...companies].sort((a,b)=>agiCompanyScore(b.stats)-agiCompanyScore(a.stats))[0]; }
+    function bestPair(){
+      let best = null;
+      for(let i=0;i<companies.length;i++){
+        for(let j=i+1;j<companies.length;j++){
+          const ids = [companies[i].id, companies[j].id];
+          const score = agiCompanyScore(combineCompanies(ids));
+          if(!best || score > best.score){ best = {ids, score}; }
+        }
+      }
+      return best;
+    }
+    function companyById(id){ return companies.find(c=>c.id===id); }
+
+    function renderNav(){
+      const nav = [
+        ["method","Method"],
+        ["layers","10 layers"],
+        ["systems","Systems"],
+        ["future","AGI / ASI"],
+        ["play","Play"],
+        ["board","Board"],
+        ["battle","Battle"],
+        ["merge","Merges"],
+        ["theses","Theses"]
+      ];
+      const el = document.getElementById("nav");
+      el.innerHTML = "";
+      nav.forEach(([id,label])=>{
+        const btn = document.createElement("button");
+        btn.className = "tab-btn" + (state.tab===id ? " active" : "");
+        btn.textContent = label;
+        btn.onclick = ()=>{ state.tab=id; renderAll(); };
+        el.appendChild(btn);
+      });
+    }
+    function renderTabs(){
+      document.querySelectorAll(".tab").forEach(x=>x.classList.add("hide"));
+      document.getElementById("tab-" + state.tab).classList.remove("hide");
+    }
+    function renderLayers(){
+      const el = document.getElementById("layers-list");
+      el.innerHTML = "";
+      layers.forEach(layer=>{
+        const card = document.createElement("div");
+        card.className = "layer-card";
+        card.innerHTML = `<div class="tiny">${layer.code}</div><div style="font-size:22px;font-weight:800;margin:4px 0 8px">${layer.name}</div><div class="small" style="line-height:1.7">${layer.desc}</div>`;
+        el.appendChild(card);
+      });
+    }
+    function renderSystems(){
+      const el = document.getElementById("systems-list");
+      el.innerHTML = "";
+      systems.forEach(s=>{
+        const card = document.createElement("div");
+        card.className = "system-card";
+        card.innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px"><div style="font-size:24px;font-weight:800">${s.icon} ${s.name}</div><span class="pill">${s.level}</span></div><div class="small" style="line-height:1.7;margin-bottom:10px">${s.why}</div><div class="tiny">Ceiling: ${s.ceiling}</div>`;
+        el.appendChild(card);
+      });
+    }
+    function renderPlay(){
+      const s = calcS(state.caps);
+      const [age, ageDesc] = brainAge(s);
+      const bn = nextShift(state.caps);
+      const windowObj = estimateAGIWindow(state.caps);
+      const all100 = state.caps.every(c => c.cur === 100);
+      const scoreEl = document.getElementById("score");
+      scoreEl.textContent = Math.round(s*100) + "%";
+      scoreEl.style.color = s >= .8 ? "#4ade80" : s >= .6 ? "#fde68a" : "#fca5a5";
+      document.getElementById("age").textContent = "AI = a " + age;
+      document.getElementById("age-desc").textContent = ageDesc;
+      document.getElementById("bottleneck-title").textContent = bn.icon + " " + bn.name;
+      document.getElementById("bottleneck-note").textContent = bn.note;
+
+      if (all100) {
+        document.getElementById("eta-text").innerHTML =
+          "All key layers are at 100%. In this model that means: <b style='color:white'>AGI is already here → 2026</b>.";
+      } else {
+        const w = windowObj;
+        document.getElementById("eta-text").innerHTML =
+          "Base scenario in this methodology: <b style='color:white'>AGI window " + w.start + "–" + w.end + "</b>. " +
+          "The longest tail here is metacognition: it should arrive last, not be cranked up ahead of memory and self-correction.";
+      }
+
+      const rawMemory = pct(state.caps.find(c=>c.key==="memory").cur, state.caps.find(c=>c.key==="memory").need);
+      const effMemory = windowObj.m.memoryEff
+      const boostPts = Math.round((effMemory - rawMemory) * 100);
+      document.getElementById("memory-boost").innerHTML =
+        "Effective memory with acceleration accounted for = <b style='color:white'>" + Math.round(effMemory*100) + "%</b>. " +
+        (boostPts > 0 ? "Self-correction + agency + metacognition already add about <b style='color:white'>+" + boostPts + " pts</b> to the speed of closing the memory bottleneck. But they do not replace memory itself — they only accelerate its maturation." : "There is almost no acceleration yet.");
+
+      const presetsEl = document.getElementById("presets");
+      presetsEl.innerHTML = "";
+      presets.forEach(p=>{
+        const btn = document.createElement("button");
+        btn.className = "preset-btn";
+        btn.textContent = p.label;
+        btn.onclick = ()=>{ p.apply(state); renderAll(); };
+        presetsEl.appendChild(btn);
+      });
+
+      const capsEl = document.getElementById("caps");
+      capsEl.innerHTML = "";
+      state.caps.forEach((c, idx)=>{
+        const ratio = pct(c.cur, c.need);
+        const color = ratio >= .8 ? "var(--green)" : ratio >= .5 ? "var(--amber)" : "var(--red)";
+        const card = document.createElement("div");
+        card.className = "panel-soft";
+        card.innerHTML = `<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px"><div style="font-weight:600">${c.icon} ${c.name}</div><div class="small" style="color:white">${c.cur}%</div></div><div class="bar"><div class="fill" style="width:${ratio*100}%;background:${color}"></div></div><input type="range" min="0" max="100" value="${c.cur}" /><div class="small" style="margin-top:8px">${c.note}</div>`;
+        card.querySelector("input").oninput = (e)=>{ state.caps[idx].cur = Number(e.target.value); renderAll(); };
+        capsEl.appendChild(card);
+      });
+    }
+    function renderBoard(){
+      const el = document.getElementById("board");
+      el.innerHTML = "";
+      breakthroughs.forEach(b=>{
+        const score = weightedReadiness(b.deps, state.caps);
+        const [label, tone] = stateLabel(score);
+        const lane = document.createElement("div");
+        lane.className = "lane";
+        lane.innerHTML = `<div class="tiny" style="text-transform:uppercase;letter-spacing:.08em">${b.window}</div><div style="font-size:24px;font-weight:700;margin:6px 0 10px">${b.title}</div><div class="leader-badge">🏁 ${b.leader}</div><div class="small" style="margin-top:12px;line-height:1.7">${b.note}</div><div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><span class="pill ${tone}">${label}</span><span class="pill">Runner-up: ${b.runner}</span></div>`;
+        el.appendChild(lane);
+      });
+    }
+    function renderBattle(){
+      const leftWrap = document.getElementById("left-company");
+      const rightWrap = document.getElementById("right-company");
+      const catWrap = document.getElementById("battle-cats");
+      leftWrap.innerHTML = ""; rightWrap.innerHTML = ""; catWrap.innerHTML = "";
+
+      companies.forEach(c=>{
+        const l = document.createElement("button");
+        l.className = "select-btn" + (state.battleLeft===c.id ? " active" : "");
+        l.textContent = c.name;
+        l.onclick = ()=>{ state.battleLeft=c.id; if(state.battleLeft===state.battleRight) state.battleRight="anthropic"; renderAll(); };
+        leftWrap.appendChild(l);
+
+        const r = document.createElement("button");
+        r.className = "select-btn" + (state.battleRight===c.id ? " active" : "");
+        r.textContent = c.name;
+        r.onclick = ()=>{ state.battleRight=c.id; if(state.battleLeft===state.battleRight) state.battleLeft="openai"; renderAll(); };
+        rightWrap.appendChild(r);
+      });
+
+      Object.entries(battleCategories).forEach(([id,cat])=>{
+        const b = document.createElement("button");
+        b.className = "select-btn" + (state.battleCat===id ? " active" : "");
+        b.textContent = cat.label;
+        b.onclick = ()=>{ state.battleCat=id; renderAll(); };
+        catWrap.appendChild(b);
+      });
+
+      const left = companyById(state.battleLeft);
+      const right = companyById(state.battleRight);
+      const cat = battleCategories[state.battleCat];
+      const leftScore = scoreFromStats(left.stats, cat.keys);
+      const rightScore = scoreFromStats(right.stats, cat.keys);
+      const winner = leftScore > rightScore ? left.name : rightScore > leftScore ? right.name : "Tie";
+
+      document.getElementById("battle-left-name").textContent = left.name;
+      document.getElementById("battle-left-name").style.color = left.color;
+      document.getElementById("battle-right-name").textContent = right.name;
+      document.getElementById("battle-right-name").style.color = right.color;
+      document.getElementById("battle-winner").textContent = winner === "Tie" ? "Tie" : winner + " leads";
+      document.getElementById("battle-explainer").textContent =
+        "Each row is one parameter. On the left is always " + left.name + ", and on the right is always " + right.name + ". The winner is shown directly in the center of the row.";
+
+      const rows = document.getElementById("battle-table");
+      rows.innerHTML = "";
+      const labelMap = {
+        memory:"Memory",
+        reasoning:"Reasoning",
+        agency:"Agency",
+        selfcorr:"Self-Correction",
+        embody:"Embodiment",
+        metacog:"Metacognition"
+      };
+
+      Object.entries(cat.keys).forEach(([k,w])=>{
+        const lv = left.stats[k] || 0;
+        const rv = right.stats[k] || 0;
+        const rowWinner = lv > rv ? left.name : rv > lv ? right.name : "Tie";
+
+        const row = document.createElement("div");
+        row.className = "battle-row-card";
+        row.innerHTML = `
+          <div class="battle-row-head">
+            <div class="battle-side">
+              <div class="battle-name" style="color:${left.color}">${left.name}</div>
+              <div class="battle-score">${lv}%</div>
+            </div>
+
+            <div class="battle-center">
+              <div class="battle-metric">${labelMap[k]}</div>
+              <div class="battle-weight">weight ${Math.round(w*100)}%</div>
+              <div class="battle-winner-pill">${rowWinner}</div>
+            </div>
+
+            <div class="battle-side right">
+              <div class="battle-name" style="color:${right.color}">${right.name}</div>
+              <div class="battle-score">${rv}%</div>
+            </div>
+          </div>
+
+          <div class="battle-bar-row">
+            <div>
+              <div class="battle-single-bar">
+                <div class="fill" style="width:${lv}%;background:${left.color}"></div>
+              </div>
+            </div>
+            <div>
+              <div class="battle-single-bar">
+                <div class="fill" style="width:${rv}%;background:${right.color}"></div>
+              </div>
+            </div>
+          </div>
+        `;
+        rows.appendChild(row);
+      });
+    }
+    function renderMerge(){
+      const chips = document.getElementById("company-chips");
+      chips.innerHTML = "";
+      companies.forEach(c=>{
+        const btn = document.createElement("button");
+        btn.className = "chip" + (state.selectedCompanies.includes(c.id) ? " active" : "");
+        btn.textContent = c.name;
+        btn.style.borderColor = c.color + "55";
+        btn.onclick = ()=>{
+          const has = state.selectedCompanies.includes(c.id);
+          if(has){
+            if(state.selectedCompanies.length > 1) state.selectedCompanies = state.selectedCompanies.filter(x=>x!==c.id);
+          } else {
+            if(state.selectedCompanies.length >= 2) state.selectedCompanies.shift();
+            state.selectedCompanies.push(c.id);
+          }
+          renderAll();
+        };
+        chips.appendChild(btn);
+      });
+
+      const selected = companies.filter(c=>state.selectedCompanies.includes(c.id));
+      const comboStats = combineCompanies(state.selectedCompanies);
+      const comboScore = agiCompanyScore(comboStats);
+      document.getElementById("merge-title").textContent = selected.map(x=>x.name).join(" + ");
+      document.getElementById("merge-summary").textContent = "Together they cover the AGI stack better than each one alone because they take the maximum from different strengths.";
+      document.getElementById("merge-score").textContent = Math.round(comboScore*100) + "%";
+      document.getElementById("merge-gap").textContent = "Main remaining gap: " + biggestGap(comboStats);
+
+      const bars = document.getElementById("merge-bars");
+      bars.innerHTML = "";
+      const labels = {memory:"Memory", reasoning:"Reasoning", agency:"Agency", selfcorr:"Self-Correction", embody:"Embodiment", metacog:"Metacognition"};
+      Object.entries(comboStats).forEach(([k,v])=>{
+        const color = v >= 80 ? "var(--green)" : v >= 55 ? "var(--amber)" : "var(--red)";
+        const row = document.createElement("div");
+        row.className = "panel-soft";
+        row.innerHTML = `<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px"><div style="font-weight:600">${labels[k]}</div><div class="small" style="color:white">${Math.round(v)}%</div></div><div class="bar"><div class="fill" style="width:${v}%;background:${color}"></div></div>`;
+        bars.appendChild(row);
+      });
+
+      const solo = bestSolo();
+      const pair = bestPair();
+      const delta = Math.round((pair.score - agiCompanyScore(solo.stats))*100);
+      document.getElementById("ecosystem-take").textContent =
+        delta >= 8
+          ? `The best pair currently gives about ${delta} pts more AGI readiness than the best single company. That means the “ecosystem / assembly” scenario looks stronger than the “single champion” scenario.`
+          : `The gap between the best pair and the best single company is small. That means the “single champion” scenario cannot be ruled out yet.`;
+    }
+    function renderTheses(){
+      const el = document.getElementById("thesis-cards");
+      el.innerHTML = "";
+      const windowObj = estimateAGIWindow(state.caps);
+      const bn = nextShift(state.caps);
+      const solo = bestSolo();
+      const pair = bestPair();
+      const pairNames = pair.ids.map(id => companies.find(c=>c.id===id).name).join(" + ");
+
+      const cards = [
+        {
+          title:"Metacognition should not arrive first",
+          text:"If you try to crank up metacognition without mature memory, self-correction, and reasoning, you get a distorted system: it imitates reflection, but has nothing to stand on."
+        },
+        {
+          title:"AI today is not an adult, but a strong child",
+          text:"On this map AI is currently closer to L7–L8: language and reasoning are already strong, but memory, embodiment, and metacognition are not fully mature yet."
+        },
+        {
+          title:"The main bottleneck is not reasoning, but memory",
+          text:"Reasoning has already grown quickly. The next shift runs through memory and knowledge of its own limits. Current bottleneck: " + bn.name.toLowerCase() + "."
+        },
+        {
+          title:"Timing is a window, not a single date",
+          text:"The base scenario in this methodology gives an AGI window of " + windowObj.start + "–" + windowObj.end + ". This is not a “prophecy,” but a working estimate based on layer maturity."
+        },
+        {
+          title:"Self-reflection accelerates memory",
+          text:"If self-correction and metacognition improve, memory should close faster. The model now reflects this instead of treating memory as a static bottleneck."
+        },
+        {
+          title:"The best solo bet ≠ the best path",
+          text:"Right now the best single-company candidate is " + solo.name + ". But the best assembly is " + pairNames + ". That means the assembly scenario should not be underestimated."
+        },
+        {
+          title:"An ant colony is an important warning",
+          text:"A highly efficient system may still fail to become reflective. Without memory and self-checking, AI risks being powerful but not metacognitive."
+        }
+      ];
+
+      cards.forEach(card=>{
+        const node = document.createElement("div");
+        node.className = "thesis-card";
+        node.innerHTML = `<div><div class="tiny" style="text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Short thesis</div><div style="font-size:24px;font-weight:800;line-height:1.35;margin-bottom:12px">${card.title}</div><div class="small" style="line-height:1.8">${card.text}</div></div>`;
+        el.appendChild(node);
+      });
+    }
+
+    function renderAll(){
+      renderNav();
+      renderTabs();
+      renderLayers();
+      renderSystems();
+      renderPlay();
+      renderBoard();
+      renderBattle();
+      renderMerge();
+      renderTheses();
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
